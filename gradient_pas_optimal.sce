@@ -1,6 +1,8 @@
-N=10;
+N=2; // 10
 A=toeplitz([2,-1,zeros(1,N-2)]);
-b = rand(N,1);
+// b = rand(N,1);
+// b = ones(N,1).*0.5;
+b = [0.1531217;0.6970851]; 
 
 function y=J(x,A,b)
     // calcul d'une forme quadratique
@@ -28,14 +30,16 @@ function [c,xn,Jxn,errors]=gradient_pasoptimal(x0,J,dJ,stop,nmax,x_opt)
     i = 1;    
     xk = x0;
     c=[J(x0,A,b)];
-    dk = -dJ(xk,A,b)
+    dk = -dJ(xk,A,b);
     xkplus1 = xk + pas_var_opt(dk, A)*dk;
     errors=[norm((xkplus1-x_opt),2)];
     c = [c,J(xkplus1,A,b)];
     while i<nmax & norm((xkplus1-xk),2)> stop    
         xk = xkplus1;
         dk = -dJ(xk,A,b)
-        xkplus1œ = xk + pas_var_opt(dk, A)*dk;        
+        disp('****');
+        disp(dk);
+        xkplus1 = xk + pas_var_opt(dk, A)*dk;        
         errors=[errors, norm((xkplus1-x_opt),2)];        
         c = [c, J(xkplus1,A,b)];
         i = i + 1;
@@ -46,9 +50,14 @@ endfunction
 
 
 x0=zeros(N,1);
-nmax = 500;
-stop = 1e-3;
+nmax =  20000; // 500;
 
+// stop = 1e-2;
+// stop = 0.1 ; 
+// stop = 1e-4;
+// stop = 1e-6;
+stop = 1e-9;
+// stop = 1e-3;
 disp('A=');
 disp(A);
 disp('x_opt_1');
@@ -60,6 +69,8 @@ disp('c');
 disp(c);
 Nit = length(c)-1;
 disp(size([0:Nit]));
+disp('nb iterations (pas optimal)');
+disp(Nit);
 disp(size(c));
 figure(2);
 plot([0:Nit],c,'k.');

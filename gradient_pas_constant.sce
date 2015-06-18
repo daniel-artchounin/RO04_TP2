@@ -1,9 +1,10 @@
-N=10;
+N= 2;//  10
 A=toeplitz([2,-1,zeros(1,N-2)]);
-b = rand(N,1);
+// b = rand(N,1);
+b = [0.1531217;0.6970851];
 
 function y=J(x,A,b)
-    // calcul d'une forme quadratique
+    // calcul d'une forme quadratique 
     y = (1/2)* x'*A*x - b'*x;
 endfunction
 
@@ -56,11 +57,15 @@ endfunction
 
 
 x0=zeros(N,1);
-nmax = 500;
-stop = 1e-3;
+nmax = 20000; //  500
+//stop = 1e-2; // 
+// stop = 0.1 ; 
+// stop = 1e-4;
+// stop = 1e-6;
+// stop = 1e-9;
+// stop = 1e-3;
 
-
-rho = rmax(A);
+rho = rmax(A)-0.1;
 disp('A=');
 disp(A);
 disp('x_opt_1');
@@ -81,6 +86,8 @@ disp(xn);
 disp('erreur : ');
 disp(norm(xn-x_opt_1,2));
 Nit = length(c)-1;
+disp('nb iterations');
+disp(Nit);
 disp(size([0:Nit]));
 disp(size(c));
 clf; // on efface le contenu des figures

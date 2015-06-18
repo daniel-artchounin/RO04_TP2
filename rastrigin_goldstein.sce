@@ -25,20 +25,19 @@ function dy=phiPrime(x,rho)
     dy = rastrigingrad(x+rho*dx)'*dx;
 endfunction
 
-function rhok=Wolfe(rastrigin,rastrigingrad,Phi,PhiPrime,xk,Dk,m1,m2)
+function rhok=Goldstein(J,dJxk,Phi,xk,Dk,m1,m2)
     // calcule le pas rhok d’apr\‘es la r\‘egle de Goldstein
-    rho = rand()/1000+0,000001; // calcul de rho_0 -> de départ joue un rôle prépondérant -> un rho_0 trop grand entraine un arrêt de l'algorithme
-    disp(rho);
+    rho = 0.1;
     rit = 0;
     alpha = 0;
     _beta = %inf; 
-    while ~( (Phi(xk,rho)<= Phi(xk,0) + m1*PhiPrime(xk,0)*rho )  & ( PhiPrime(xk,rho)>=m2*PhiPrime(xk,0) ) )
-        if  Phi(xk,rho) > (Phi(xk,0) + m1*PhiPrime(xk,0)*rho) then
+    while ( (Phi(xk,A,b,rho)> Phi(xk,A,b,0) + m1*rho*dJxk(xk,A,b)'*Dk(xk,A,b)) | (Phi(xk,A,b,rho) < Phi(xk,A,b,0) + m2*rho*dJxk(xk,A,b)'*Dk(xk,A,b)) )
+        if Phi(xk,A,b,rho)> Phi(xk,A,b,0) + m1*dJxk(xk,A,b)'*Dk(xk,A,b)*rho then
             _beta = rho;
             rho = (alpha + _beta)/2;
-        elseif  (Phi(xk,rho)<= Phi(xk,0) + m1*PhiPrime(xk,0)*rho ) & ( PhiPrime(xk,rho) < m2*PhiPrime(xk,0) ) then
+        elseif Phi(xk,A,b,rho) < Phi(xk,A,b,0) + m2*dJxk(xk,A,b)'*Dk(xk,A,b)*rho  then
             alpha = rho;
-            if (_beta  <  %inf) then
+            if _beta  <  %inf then
                 rho = (alpha + _beta)/2
             else
                 rho = 2*rho;

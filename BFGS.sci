@@ -6,34 +6,34 @@ disp('BFGS for Rastrigin');
 //-----------------------------------------------------
 //
 function y=rastrigin(x)  // the function to optimize
-n=max(size(x));
-y=n+sum(x.^2-cos(2*%pi*x));
+    n=max(size(x));
+    y=n+sum(x.^2-cos(2*%pi*x));
 endfunction
 //-----------------------------------------------------
 function y=rastrigingrad(x)  // the gradient of the function to optimize
-y=2*x+2*%pi*sin(2*%pi*x);
+    y=2*x+2*%pi*sin(2*%pi*x);
 endfunction
 //--------------------------------------------------------
 function z=dotprod(x,y); // computes the dot product of x and y
-z=sum(x.*y);
+    z=sum(x.*y);
 endfunction
 //-----------------------------------------------------
 function [d,gx]=descentdirection(Bk,gx);   // descent direction: gradient
-d=linsolve(Bk,gx);
+    d=linsolve(Bk,gx);
 endfunction
 //----------------------------------------------------
 function [xnew,fnew]=backtracking(f,x,fx,gx,d);// line search by backtracking until Armijo condition
-tau=0.3;
-bet=0.0001;
-alphainit=1;
-alpha=alphainit;
-xnew=x+alpha*d;
-fnew=f(xnew);
-while(fnew>fx+bet*alpha*dotprod(gx,d))
-  alpha=tau*alpha;
-  xnew=x+alpha*d;
-  fnew=f(xnew);
-end
+    tau=0.3;
+    bet=0.0001;
+    alphainit=1;
+    alpha=alphainit;
+    xnew=x+alpha*d;
+    fnew=f(xnew);
+    while(fnew>fx+bet*alpha*dotprod(gx,d))
+      alpha=tau*alpha;
+      xnew=x+alpha*d;
+      fnew=f(xnew);
+    end
 endfunction
 
 
@@ -56,7 +56,9 @@ Bk=eye(n,n);
 while (norm(gx)>epsilon)
   x0=x;gx0=gx;
   d=descentdirection(Bk,gx');  
-  [x,fx]=backtracking(rastrigin,x,fx,gx,d');
+//  [x,fx]=backtracking(rastrigin,x,fx,gx,d');
+  rho = wolf();
+  x = x0 + pd;
   Xbest=[Xbest;x];
   Fbest=[Fbest;fx];
   gx=rastrigingrad(x);

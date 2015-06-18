@@ -1,6 +1,7 @@
-N=10;
+N= 2;// 10;
 A=toeplitz([2,-1,zeros(1,N-2)]);
-b = rand(N,1);
+// b = rand(N,1);
+b = [0.1531217;0.6970851];
 
 function y=J(x,A,b)
     // calcul d'une forme quadratique
@@ -53,10 +54,14 @@ endfunction
 
 
 x0=zeros(N,1);
-nmax = 500;
-stop = 1e-3;
+nmax = 20000; // 500;
+// stop = 1e-2; // 
+// stop = 0.1 ; 
+//stop = 1e-4;
+// stop = 1e-6;
+// stop = 1e-9;
+// stop = 1e-3;
 
-rho = rmax(A);
 disp('A=');
 disp(A);
 disp('x_opt_1');
@@ -65,7 +70,7 @@ disp(x_opt_1);
 
 
 figure(1);
-rho_tab = linspace(0,rmax(A),5);
+rho_tab = linspace(0,rmax(A)-0.1,5);
 disp(rho_tab);
 
 [c_bis,xn_bis,Jxn_bis,errors_bis]=gradient_pasconstant_new(x0,J,gradJ,rho_tab(1),stop,nmax,x_opt_1);
@@ -103,6 +108,8 @@ plot([0:Nit],c_bis,'r.');
 
 [c_bis,xn_bis,Jxn_bis,errors_bis]=gradient_pasconstant_new(x0,J,gradJ,pas_cst_opt(A),stop,nmax,x_opt_1);
 Nit = length(c_bis)-1;
+disp('nb iterations (pas constant optimal)');
+disp(Nit);
 disp(size([0:Nit]));
 disp(size(c_bis));
 plot([0:Nit],c_bis,'k.');
